@@ -4,6 +4,8 @@ pool:
 variables:
   buildConfiguration: 'Release'
   dotnetSdkVersion: '2.1.505'
+  major: 1
+  minor: $[counter(variables['major'], 100)]
 
 steps:
 - task: DotNetCoreInstaller@0
@@ -31,14 +33,14 @@ steps:
     projects: '**/*.csproj'
     arguments: '--no-build --configuration $(buildConfiguration)'
     versioningScheme: byPrereleaseNumber
-    majorVersion: '1'
-    minorVersion: '0'
+    majorVersion: '$(major)'
+    minorVersion: '$(minor)'
     patchVersion: '0'
  
 - task: NuGetCommand@2
   displayName: 'Publish NuGet package'
   inputs:
     command: push
-    publishVstsFeed: 'Tailspin.SpaceGame.Web.Models'
+    publishVstsFeed: 'Tailspin.SpaceGame.Web.Models.Test'
     allowPackageConflicts: true
   condition: succeeded()
